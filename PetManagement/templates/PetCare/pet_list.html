@@ -1,0 +1,51 @@
+{% extends 'PetCare/base.html' %}
+
+{% block title %}Pet Records | PetCareSystem{% endblock %}
+
+{% block content %}
+<h1>Pet Records</h1>
+<p>Keep your pets' information organized and up to date.</p>
+<p style="margin-top: 20px;"><a class="button" href="{% url 'pet_create' %}">Add a Pet</a></p>
+
+{% if pets %}
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Pet</th>
+                <th>Type / Breed</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Color</th>
+                <th>Owner</th>
+                <th>Contact</th>
+                <th>Registered</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pet in pets %}
+            <tr>
+                <td>#{{ pet.id }} — {{ pet.name }}</td>
+                <td>{{ pet.get_pet_type_display }}{% if pet.breed %} / {{ pet.breed }}{% endif %}</td>
+                <td>{{ pet.age }}</td>
+                <td>{{ pet.get_gender_display }}</td>
+                <td>{{ pet.color|default:"—" }}</td>
+                <td>{{ pet.owner_name }}</td>
+                <td>{{ pet.owner_contact }}</td>
+                <td>{{ pet.date_registered|date:"M j, Y" }}</td>
+                <td class="actions">
+                    <a href="{% url 'pet_update' pet.pk %}">Edit</a>
+                    <a href="{% url 'pet_delete' pet.pk %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty">
+    <p>No pet records yet. Add your first pet to get started.</p>
+</div>
+{% endif %}
+{% endblock %}
